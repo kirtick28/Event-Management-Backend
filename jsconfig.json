@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS", // Or "ESNext" if you're using import/export syntax with "type": "module" in package.json
+    "target": "ESNext", // Or a specific ES version like "ES2022" or "ES6"
+    "checkJs": true, // Enables type checking on JavaScript files (optional, but recommended for better IntelliSense)
+    "noEmit": true, // Don't emit compiled JavaScript (this is a JS project, not TS)
+    "allowJs": true // Allow JavaScript files (implicitly true for jsconfig.json, but good to be explicit)
+  },
+  "exclude": ["node_modules", "**/node_modules/*", "dist"] // Exclude these folders from IntelliSense indexing
+}
