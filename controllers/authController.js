@@ -11,6 +11,13 @@ const signup = async (req, res) => {
         message: 'Data must have name, email and password'
       });
     }
+    const existUser = await User.find({ email });
+    if (existUser) {
+      return res.status(409).json({
+        status: 'Failure',
+        message: 'Email already taken'
+      });
+    }
     const hashedPass = await bcrypt.hash(password, 10);
     const user = new User({
       name,

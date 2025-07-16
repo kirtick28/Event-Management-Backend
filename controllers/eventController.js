@@ -19,7 +19,7 @@ const createEvent = async (req, res) => {
     }
     const event = new Event(data);
     await event.save();
-    return res.status(200).json({
+    return res.status(201).json({
       status: 'Success',
       data: {
         eventId: event._id
@@ -39,7 +39,7 @@ const getAllEvents = async (req, res) => {
       path: 'registrations.userId',
       select: 'name email -_id'
     });
-    return res.status(201).json({
+    return res.status(200).json({
       status: 'Success',
       data: {
         events
@@ -60,7 +60,13 @@ const getEventById = async (req, res) => {
       path: 'registrations.userId',
       select: 'name email -_id'
     });
-    return res.status(201).json({
+    if (!event) {
+      return res.status(404).json({
+        status: 'Failure',
+        message: 'Event not found'
+      });
+    }
+    return res.status(200).json({
       status: 'Success',
       data: {
         event
@@ -83,7 +89,7 @@ const updateEvent = async (req, res) => {
       new: true
     });
     if (!updatedEvent) {
-      res.status(400).json({
+      res.status(404).json({
         status: 'Failure',
         message: 'Event does not exist'
       });
