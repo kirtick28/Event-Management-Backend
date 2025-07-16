@@ -5,37 +5,43 @@ This is a Node.js-based REST API for managing events and user registrations, bui
 ## Setup Instructions
 
 1. **Clone the Repository**
+
    ```bash
-   git clone <repository-url>
-   cd <repository-directory>
+   git clone https://github.com/kirtick28/Event-Management-Backend.git
+   cd Event-Management-Backend
    ```
 
 2. **Install Dependencies**
    Ensure Node.js is installed, then run:
+
    ```bash
    npm install
    ```
 
 3. **Set Up Environment Variables**
    Create a `.env` file in the root directory and add the following:
+
    ```
    MONGO_URI=<your-mongodb-connection-string>
    JWT_SECRET=<your-jwt-secret-key>
    PORT=5000
    ```
+
    Replace `<your-mongodb-connection-string>` with your MongoDB URI and `<your-jwt-secret-key>` with a secure secret key for JWT.
 
 4. **Create an Admin User**
    The API does not provide an endpoint to create an admin user directly. To create an admin, manually insert a user with the `role: 'admin'` into the MongoDB `users` collection. Example MongoDB command:
+
    ```javascript
    db.users.insertOne({
-     name: "Admin Name",
-     email: "admin@example.com",
-     password: "<hashed-password>",
-     role: "admin",
+     name: 'Admin Name',
+     email: 'admin@example.com',
+     password: '<hashed-password>',
+     role: 'admin',
      registeredEvents: []
    });
    ```
+
    Ensure the password is hashed using `bcrypt` (e.g., using a script or tool to generate a hash).
 
 5. **Run the Application**
@@ -50,27 +56,32 @@ This is a Node.js-based REST API for managing events and user registrations, bui
 The API provides endpoints for user authentication, user management, and event management. It uses JWT for authentication and supports two roles: `user` and `admin`. Admins can create/update events and view all users, while users can register/unregister for events and update their profiles.
 
 ### Base URL
+
 `http://localhost:5000/api`
 
 ### Authentication
+
 - Most endpoints require a JWT token in the `Authorization` header: `Bearer <token>`.
 - Tokens are generated via `/auth/signup` or `/auth/login`.
 
 ### Endpoints
 
 #### Authentication
+
 - **POST /auth/signup**  
   Register a new user (default role: `user`).
 - **POST /auth/login**  
   Log in and receive a JWT token.
 
 #### User Management
+
 - **GET /user/**  
   Retrieve all users (admin only).
 - **PATCH /user/**  
   Update user details (authenticated user).
 
 #### Event Management
+
 - **GET /event/**  
   Retrieve all events (authenticated user).
 - **POST /event/**  
@@ -89,7 +100,9 @@ The API provides endpoints for user authentication, user management, and event m
 ## Example Requests/Responses
 
 ### 1. User Signup
+
 **Request**
+
 ```bash
 curl -X POST http://localhost:5000/api/auth/signup \
 -H "Content-Type: application/json" \
@@ -97,6 +110,7 @@ curl -X POST http://localhost:5000/api/auth/signup \
 ```
 
 **Response (Success)**
+
 ```json
 {
   "status": "Success",
@@ -105,6 +119,7 @@ curl -X POST http://localhost:5000/api/auth/signup \
 ```
 
 **Response (Error - Email Taken)**
+
 ```json
 {
   "status": "Failure",
@@ -113,7 +128,9 @@ curl -X POST http://localhost:5000/api/auth/signup \
 ```
 
 ### 2. User Login
+
 **Request**
+
 ```bash
 curl -X POST http://localhost:5000/api/auth/login \
 -H "Content-Type: application/json" \
@@ -121,6 +138,7 @@ curl -X POST http://localhost:5000/api/auth/login \
 ```
 
 **Response (Success)**
+
 ```json
 {
   "status": "Success",
@@ -129,6 +147,7 @@ curl -X POST http://localhost:5000/api/auth/login \
 ```
 
 **Response (Error - Invalid Credentials)**
+
 ```json
 {
   "status": "Failed",
@@ -137,7 +156,9 @@ curl -X POST http://localhost:5000/api/auth/login \
 ```
 
 ### 3. Create Event (Admin Only)
+
 **Request**
+
 ```bash
 curl -X POST http://localhost:5000/api/event/ \
 -H "Content-Type: application/json" \
@@ -146,6 +167,7 @@ curl -X POST http://localhost:5000/api/event/ \
 ```
 
 **Response (Success)**
+
 ```json
 {
   "status": "Success",
@@ -156,6 +178,7 @@ curl -X POST http://localhost:5000/api/event/ \
 ```
 
 **Response (Error - Unauthorized)**
+
 ```json
 {
   "status": "Denied",
@@ -164,13 +187,16 @@ curl -X POST http://localhost:5000/api/event/ \
 ```
 
 ### 4. Register for an Event
+
 **Request**
+
 ```bash
 curl -X POST http://localhost:5000/api/event/register/<event-id> \
 -H "Authorization: Bearer <user-jwt-token>"
 ```
 
 **Response (Success)**
+
 ```json
 {
   "status": "Success",
@@ -179,6 +205,7 @@ curl -X POST http://localhost:5000/api/event/register/<event-id> \
 ```
 
 **Response (Error - Already Registered)**
+
 ```json
 {
   "status": "Failure",
@@ -187,13 +214,16 @@ curl -X POST http://localhost:5000/api/event/register/<event-id> \
 ```
 
 ### 5. Get Upcoming Events
+
 **Request**
+
 ```bash
 curl -X GET http://localhost:5000/api/event/upcoming?sortDate=asc \
 -H "Authorization: Bearer <jwt-token>"
 ```
 
 **Response (Success)**
+
 ```json
 {
   "status": "Success",
@@ -214,6 +244,7 @@ curl -X GET http://localhost:5000/api/event/upcoming?sortDate=asc \
 ```
 
 ## Notes
+
 - Ensure the MongoDB server is running before starting the application.
 - Admin users must be created manually in the database, as there is no endpoint to assign the `admin` role.
 - Use tools like Postman or cURL for testing API endpoints.
